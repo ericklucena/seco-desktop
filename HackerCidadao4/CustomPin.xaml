@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="HackerCidadao4.CustomPin"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:HackerCidadao4"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid x:Name="ContentGrid" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <StackPanel>
+            <Grid Margin="0" Width="33" Height="33" Background="White">
+
+                <Rectangle Grid.Column="0" HorizontalAlignment="Left" Margin="-0.208,13.238,0,-0.146" Width="10.555" Fill="#c3dcd5" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform AngleX="-23"/>
+                            <RotateTransform Angle="-12.944"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+
+                <Rectangle Grid.Column="0" Grid.ColumnSpan="2" Fill="White" Stroke="#c3dcd5" StrokeThickness="0.5"/>
+                <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Bottom" Background="Red">
+                    <ProgressBar Foreground="Green" Background="Red" Value="83" Height="5"/>
+                </StackPanel>
+                <ContentPresenter Grid.Column="1" HorizontalAlignment="Center"
+                                                                VerticalAlignment="Center"
+                                                                Margin="0" TextBlock.FontFamily="Segoe UI" TextBlock.FontWeight="Bold" TextBlock.Foreground="#FFB8D30B">
+                </ContentPresenter>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</UserControl>
