@@ -72,7 +72,6 @@
                 <CheckBox x:Name="AllCheckbox" IsChecked="True" Click="CheckBox_Click" Foreground="#ebca78" FontSize="14" FontWeight="Bold">Todos</CheckBox>
                 <CheckBox x:Name="VolumeAlertCheckbox" Click="CheckBox_Click" Foreground="#ebca78" FontSize="14" FontWeight="Bold">Volume em Alerta/Crítico</CheckBox>
                 <CheckBox x:Name="GasAlertCheckbox" Click="CheckBox_Click" Foreground="#ebca78" FontSize="14" FontWeight="Bold">Gás em Alerta/Crítico</CheckBox>
-                <Button Margin="0,10,0,0" Click="Button_Click">Salvar Json</Button>
             </StackPanel>
         </Grid>
 

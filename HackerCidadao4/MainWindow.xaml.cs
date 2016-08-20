@@ -21,7 +21,6 @@ using Microsoft.Maps.MapControl.WPF;
 using System.Windows.Threading;
 using HackerCidadao4.Services;
 using HackerCidadao4.Entities;
-using HackerCidadao4.Data;
 using Microsoft.Win32;
 
 namespace BusDataCollector
@@ -36,9 +35,7 @@ namespace BusDataCollector
         private BetterBackgroundWorker bwLoadVehicles;
         private string _currentJsonData;
         private List<Sensor> _sensors;
-        private MultiSensor _mSensor;
         private DispatcherTimer _dispatcherTimer;
-        private ManholeRepository _repository;
         private Manhole _selectedManhole;
 
         public MainWindow()
@@ -52,10 +49,8 @@ namespace BusDataCollector
 
             _dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             _dispatcherTimer.Tick += _dispatcherTimer_Tick;
-            _dispatcherTimer.Interval = new TimeSpan(0, 0, 5);
+            _dispatcherTimer.Interval = new TimeSpan(0, 0, 15);
             _dispatcherTimer.Start();
-
-            _repository = ManholeRepository.Instance;
 
             FillSidebar();
 
@@ -69,14 +64,8 @@ namespace BusDataCollector
 
         private void BwLoadVehicles_DoWork(object sender, BetterDoWorkEventArgs args)
         {
-            _currentJsonData = Network.SensorsData();
-            _sensors = _ParseSensors(_currentJsonData).Sensor;
-
-            _currentJsonData = Network.MultiSensorData();
-            _mSensor = _ParseMultiSensor(_currentJsonData);
-
-            List<Sensor> sensors = _sensors.Where(s => s.Nome.StartsWith(ULTRASSSOM_FILTER)).ToList();
-            _repository.InsertSensorsValues(sensors, _mSensor);
+            _currentJsonData = Network.SecoData();
+            _sensors = _ParseSensors(_currentJsonData);
         }
 
         private void BwLoadVehicles_RunWorkerCompleted(object sender, BetterRunWorkerCompletedEventArgs args)
@@ -86,12 +75,16 @@ namespace BusDataCollector
 
         private void _RefreshMap()
         {
+            if (_sensors == null)
+                return;
+
             MapControl.Children.Clear();
 
             bool gasAlert = GasAlertCheckbox.IsChecked.Value;
             bool volumeAlert = VolumeAlertCheckbox.IsChecked.Value;
+            List<Manhole> repository = _sensors?.Select(m => m.CreateManhole()).ToList();
 
-            foreach (Manhole m in _repository.GetManholes(volumeAlert, gasAlert))
+            foreach (Manhole m in repository)
             {
                 Pushpin pin = new Pushpin();
 
@@ -124,9 +117,9 @@ namespace BusDataCollector
             FillSidebar();
         }
 
-        private SensorList _ParseSensors(string json)
+        private List<Sensor> _ParseSensors(string json)
         {
-            return JsonConvert.DeserializeObject<SensorList>(json);
+            return JsonConvert.DeserializeObject<List<Sensor>>(json);
         }
 
         private MultiSensor _ParseMultiSensor(string json)
@@ -148,10 +141,10 @@ namespace BusDataCollector
                 TextCurrentVolume.Text = _selectedManhole.FillRatio * 100 + " %";
                 TextDimensions.Text = _selectedManhole.Dimensions.ToString();
 
-                var date = _selectedManhole.LastManteinance.Date;
+                var date = _selectedManhole.LastManteinance.Date.ToLocalTime();
                 TextManteinance.Text = string.Format("{0:00}/{1:00}/{2:00}", date.Day, date.Month, date.Year);
 
-                date = _selectedManhole.LastUpdated.Date;
+                date = _selectedManhole.LastUpdated.Date.ToLocalTime();
                 var time = _selectedManhole.LastUpdated.TimeOfDay;
                 TextUpdated.Text = string.Format("{0:00}/{1:00}/{2:00}", date.Day, date.Month, date.Year);
                 TextUpdatedTime.Text = string.Format("{0:00}:{1:00}:{2:00}", time.Hours, time.Minutes, time.Seconds);
@@ -196,24 +189,5 @@ namespace BusDataCollector
             _RefreshMap();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            bool gasAlert = GasAlertCheckbox.IsChecked.Value;
-            bool volumeAlert = VolumeAlertCheckbox.IsChecked.Value;
-
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-            saveFileDialog1.Filter = "Json file|*.json";
-            saveFileDialog1.Title = "Save an Json File";
-            saveFileDialog1.ShowDialog();
-
-            // If the file name is not an empty string open it for saving.
-            if (saveFileDialog1.FileName != "")
-            {
-                System.IO.StreamWriter file = new System.IO.StreamWriter(saveFileDialog1.FileName, false);
-                file.WriteLine(_SerializeManholes(_repository.GetManholes(volumeAlert, gasAlert)));
-
-                file.Close();
-            }
-        }
     }
 }

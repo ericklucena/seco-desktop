@@ -59,15 +59,15 @@ namespace HackerCidadao4.Data
 
         public void InsertSensorsValues(List<Sensor> sensors, MultiSensor mSensor)
         {
-            int i = 0;
-            int size = sensors.Count;
-            foreach (Manhole m in _Manholes.Values)
-            {
-                double value;
-                Double.TryParse(sensors.ElementAt(i++ % size).Valor, out value);
-                m.CurrentHeight = value;
-                m.GasState = mSensor.GasState;
-            }
+            //int i = 0;
+            //int size = sensors.Count;
+            //foreach (Manhole m in _Manholes.Values)
+            //{
+            //    double value;
+            //    Double.TryParse(sensors.ElementAt(i++ % size).Valor, out value);
+            //    m.CurrentHeight = value;
+            //    m.GasState = mSensor.GasState;
+            //}
         }
 
         private List<Manhole> _CreateMocks()

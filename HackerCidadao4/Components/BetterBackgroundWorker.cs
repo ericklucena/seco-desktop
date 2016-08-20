@@ -8,8 +8,8 @@ using System.Threading;
 namespace BusDataCollector.Components
 {
 	public delegate void BetterDoWorkEventHandler(object sender, BetterDoWorkEventArgs args);
-    public delegate void BetterRunWorkerCompletedEventHandler(object sender, BetterRunWorkerCompletedEventArgs args);
-    public delegate void BetterAllWorkersCompletedEventHandler(object sender, EventArgs args);
+	public delegate void BetterRunWorkerCompletedEventHandler(object sender, BetterRunWorkerCompletedEventArgs args);
+	public delegate void BetterAllWorkersCompletedEventHandler(object sender, EventArgs args);
 
 	#region BetterDoWorkEventArgs
 	public abstract class BetterDoWorkEventArgs : DoWorkEventArgs
@@ -52,10 +52,10 @@ namespace BusDataCollector.Components
 		public int Id { get; private set; }
 		public object Tag { get; set; }
 	}
-    #endregion
+	#endregion
 
-    #region EBetterBackgroundWorkerMode
-    public enum EBetterBackgroundWorkerMode
+	#region EBetterBackgroundWorkerMode
+	public enum EBetterBackgroundWorkerMode
 	{
 		/// <summary>
 		/// Processa novas requisições de RunWorkerAsync independentemente e imediatamente, sem cancelar as requisições em andamento.
@@ -254,17 +254,17 @@ namespace BusDataCollector.Components
 			if (_Mode == EBetterBackgroundWorkerMode.ProcessRequestsSequentially)
 				_TryRunAvailableBgWorkerAsync();
 
-            if (!IsBusy)
-            {
-                _OnAllWorkersCompleted(new EventArgs());
-            }
+			if (!IsBusy)
+			{
+				_OnAllWorkersCompleted(new EventArgs());
+			}
 		}
 		#endregion
 
 		#region Public Events
 		public event BetterDoWorkEventHandler DoWork;
-        public event BetterRunWorkerCompletedEventHandler RunWorkerCompleted;
-        public event BetterAllWorkersCompletedEventHandler AllWorkersCompleted;
+		public event BetterRunWorkerCompletedEventHandler RunWorkerCompleted;
+		public event BetterAllWorkersCompletedEventHandler AllWorkersCompleted;
 
 		/// <summary>
 		/// Evento disparado imediatamente antes de começar o DoWork, ainda na Thread principal.
@@ -289,11 +289,11 @@ namespace BusDataCollector.Components
 				RunWorkerCompleted(this, args);
 		}
 
-        private void _OnAllWorkersCompleted(EventArgs args)
-        {
-            if (AllWorkersCompleted != null)
-                AllWorkersCompleted(this, args);
-        }
+		private void _OnAllWorkersCompleted(EventArgs args)
+		{
+			if (AllWorkersCompleted != null)
+				AllWorkersCompleted(this, args);
+		}
 
 		#endregion
 
@@ -337,21 +337,21 @@ namespace BusDataCollector.Components
 		private void _TryRunAvailableBgWorkerAsync()
 		{
 			lock(_QueuedRequestsLockObject)
-            {
-                // Mantém apenas a última requisição na fila
-                if(_Mode == EBetterBackgroundWorkerMode.ProcessLastRequestedWorkerWhenAvailable)
-                {
-                    while(_QueuedRequests.Count > 1)
-                    {
-                        _QueuedRequests.Dequeue();
-                    }
-                }
+			{
+				// Mantém apenas a última requisição na fila
+				if(_Mode == EBetterBackgroundWorkerMode.ProcessLastRequestedWorkerWhenAvailable)
+				{
+					while(_QueuedRequests.Count > 1)
+					{
+						_QueuedRequests.Dequeue();
+					}
+				}
 				if (_QueuedRequests.Count > 0 && _BgWorkers.Count == 0)
 				{
 					InnerBetterDoWorkEventArgs args = _QueuedRequests.Dequeue();
 					_RunAvailableBgWorkerAsync(args);
 				}
-            }
+			}
 		}
 
 		protected override void Dispose(bool disposing)

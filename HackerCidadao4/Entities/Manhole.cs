@@ -6,78 +6,78 @@ using System.Threading.Tasks;
 
 namespace HackerCidadao4.Entities
 {
-    public class Dimension
-    {
-        public double X { get; set; }
-        public double Y { get; set; }
-        public double Z { get; set; }
-
-        public override string ToString()
+        public class Dimension
         {
-            return string.Format("{0} x {1} x {2}", X, Y, Z);
-        }
-    }
+            public double X { get; set; }
+            public double Y { get; set; }
+            public double Z { get; set; }
 
-    public enum EImportanceState
-    {
-        Normal,
-        Alert,
-        Critical
-    }
-
-    public class Manhole
-    {
-        private const double MAX_HEIGHT = 400.0f;
-        private const double MIN_HEIGHT = 5.0f;
-
-        private double _currentHeight;
-
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Street { get; set; }
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
-        public double CurrentHeight {
-            get
+            public override string ToString()
             {
-                return _currentHeight;
+                return string.Format("{0} x {1} x {2}", X, Y, Z);
             }
-            set
-            {
-                if (value >= MAX_HEIGHT)
-                    _currentHeight = MAX_HEIGHT;
-                else if (value <= MIN_HEIGHT)
-                    _currentHeight = MIN_HEIGHT;
-                else
-                    _currentHeight = value;
-                LastUpdated = DateTime.Now;
+        }
+
+        public enum EImportanceState
+        {
+            Normal,
+            Alert,
+            Critical
+        }
+
+        public class Manhole
+        {
+            private const double MAX_HEIGHT = 400.0f;
+            private const double MIN_HEIGHT = 5.0f;
+
+            private double _currentHeight;
+
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public string Street { get; set; }
+            public double Latitude { get; set; }
+            public double Longitude { get; set; }
+            public double CurrentHeight {
+                get
+                {
+                    return _currentHeight;
+                }
+                set
+                {
+                    if (value >= MAX_HEIGHT)
+                        _currentHeight = MAX_HEIGHT;
+                    else if (value <= MIN_HEIGHT)
+                        _currentHeight = MIN_HEIGHT;
+                    else
+                        _currentHeight = value;
+                    LastUpdated = DateTime.Now;
                 
+                }
             }
-        }
-        public double FillRatio
-        {
-            get
+            public double FillRatio
             {
-                return (Dimensions.Z - _currentHeight) / Dimensions.Z;
+                get
+                {
+                    return (Dimensions.Z - _currentHeight) / Dimensions.Z;
+                }
             }
-        }
 
-        public Dimension Dimensions { get; set; }
-        public EImportanceState GasState { get; set; }
-        public DateTime LastManteinance { get; set; }
-        public DateTime LastUpdated { get; set; }
+            public Dimension Dimensions { get; set; }
+            public EImportanceState GasState { get; set; }
+            public DateTime LastManteinance { get; set; }
+            public DateTime LastUpdated { get; set; }
 
-        public EImportanceState VolumeState
-        {
-            get
+            public EImportanceState VolumeState
             {
-                if (FillRatio <= 0.50f)
-                    return EImportanceState.Normal;
-                else if (FillRatio <= 0.80f)
-                    return EImportanceState.Alert;
-                else
-                    return EImportanceState.Critical;
-            }
-        }        
-    }
+                get
+                {
+                    if (FillRatio <= 0.50f)
+                        return EImportanceState.Normal;
+                    else if (FillRatio <= 0.80f)
+                        return EImportanceState.Alert;
+                    else
+                        return EImportanceState.Critical;
+                }
+            }        
+        }
 }
