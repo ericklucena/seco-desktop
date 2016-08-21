@@ -1,29 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.ComponentModel;
 using Newtonsoft.Json;
-using System.IO;
 using BusDataCollector.Components;
-using System.Threading;
 using Microsoft.Maps.MapControl.WPF;
 using System.Windows.Threading;
 using HackerCidadao4.Services;
 using HackerCidadao4.Entities;
-using Microsoft.Win32;
+using HackerCidadao4.Data;
 
-namespace BusDataCollector
+namespace HackerCidadao4
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -34,9 +23,11 @@ namespace BusDataCollector
 
         private BetterBackgroundWorker bwLoadVehicles;
         private string _currentJsonData;
+        private List<SecoSensor> _secoSensors;
         private List<Sensor> _sensors;
+        List<Manhole> _repository;
         private DispatcherTimer _dispatcherTimer;
-        private Manhole _selectedManhole;
+        private int _selectedManholeId;
 
         public MainWindow()
         {
@@ -65,7 +56,15 @@ namespace BusDataCollector
         private void BwLoadVehicles_DoWork(object sender, BetterDoWorkEventArgs args)
         {
             _currentJsonData = Network.SecoData();
-            _sensors = _ParseSensors(_currentJsonData);
+            _secoSensors = _ParseSecoSensors(_currentJsonData);
+            try
+            {
+                _currentJsonData = Network.SensorsData();
+                _sensors = _ParseSensors(_currentJsonData).Sensor;
+            }catch
+            {
+
+            }
         }
 
         private void BwLoadVehicles_RunWorkerCompleted(object sender, BetterRunWorkerCompletedEventArgs args)
@@ -75,16 +74,19 @@ namespace BusDataCollector
 
         private void _RefreshMap()
         {
-            if (_sensors == null)
+            if (_secoSensors == null)
                 return;
 
             MapControl.Children.Clear();
 
             bool gasAlert = GasAlertCheckbox.IsChecked.Value;
             bool volumeAlert = VolumeAlertCheckbox.IsChecked.Value;
-            List<Manhole> repository = _sensors?.Select(m => m.CreateManhole()).ToList();
+            _repository = _secoSensors?.Select(m => m.CreateManhole()).ToList();
+            ManholeRepository.Instance.InsertSensorsValues(_sensors);
+            _repository.AddRange(ManholeRepository.Instance.GetManholes().Where(m => m.Id % 5 == 0));
 
-            foreach (Manhole m in repository)
+
+            foreach (Manhole m in _repository)
             {
                 Pushpin pin = new Pushpin();
 
@@ -95,7 +97,7 @@ namespace BusDataCollector
                 pin.Height = 50;
                 pin.PositionOrigin = PositionOrigin.BottomLeft;
                 pin.Location = new Location(m.Latitude, m.Longitude);
-                pin.Tag = m;
+                pin.Tag = m.Id;
                 pin.MouseDown += Pin_MouseDown;
                 if (m.GasState == EImportanceState.Critical || m.VolumeState == EImportanceState.Critical)
                     pin.Background = new System.Windows.Media.SolidColorBrush(Color.FromRgb(127, 0, 0));
@@ -113,13 +115,18 @@ namespace BusDataCollector
         private void Pin_MouseDown(object sender, MouseButtonEventArgs e)
         {
             InfoPanel.Visibility = Visibility.Visible;
-            _selectedManhole = (Manhole)(sender as Pushpin).Tag;
+            _selectedManholeId = (int)(sender as Pushpin).Tag;
             FillSidebar();
         }
 
-        private List<Sensor> _ParseSensors(string json)
+        private List<SecoSensor> _ParseSecoSensors(string json)
         {
-            return JsonConvert.DeserializeObject<List<Sensor>>(json);
+            return JsonConvert.DeserializeObject<List<SecoSensor>>(json);
+        }
+
+        private SensorList _ParseSensors(string json)
+        {
+            return JsonConvert.DeserializeObject<SensorList>(json);
         }
 
         private MultiSensor _ParseMultiSensor(string json)
@@ -134,22 +141,27 @@ namespace BusDataCollector
 
         private void FillSidebar()
         {
-            if (_selectedManhole != null)
-            {
-                TextName.Text = _selectedManhole.Name;
-                TextAddress.Text = _selectedManhole.Street;
-                TextCurrentVolume.Text = _selectedManhole.FillRatio * 100 + " %";
-                TextDimensions.Text = _selectedManhole.Dimensions.ToString();
+            Manhole manhole = null;
 
-                var date = _selectedManhole.LastManteinance.Date.ToLocalTime();
+            manhole = _repository?.Find(m => m.Id == _selectedManholeId);
+            
+            if (manhole != null)
+            {
+                TextName.Text = manhole.Name;
+                TextAddress.Text = manhole.Street;
+                TextCurrentVolume.Text = manhole.FillRatio * 100 + " %";
+                TextCurrentHeight.Text = string.Format("{0:0.00} cm", manhole.CurrentHeight);
+                TextDimensions.Text = manhole.Dimensions.ToString();
+
+                var date = manhole.LastManteinance.Date;
                 TextManteinance.Text = string.Format("{0:00}/{1:00}/{2:00}", date.Day, date.Month, date.Year);
 
-                date = _selectedManhole.LastUpdated.Date.ToLocalTime();
-                var time = _selectedManhole.LastUpdated.TimeOfDay;
+                date = manhole.LastUpdated.Date;
+                var time = manhole.LastUpdated.TimeOfDay;
                 TextUpdated.Text = string.Format("{0:00}/{1:00}/{2:00}", date.Day, date.Month, date.Year);
                 TextUpdatedTime.Text = string.Format("{0:00}:{1:00}:{2:00}", time.Hours, time.Minutes, time.Seconds);
 
-                switch (_selectedManhole.GasState)
+                switch (manhole.GasState)
                 {
                     case EImportanceState.Normal:
                         TextStatus.Text = "Normal";

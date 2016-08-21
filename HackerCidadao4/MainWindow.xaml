@@ -1,4 +1,4 @@
-﻿<Window x:Class="BusDataCollector.MainWindow"
+﻿<Window x:Class="HackerCidadao4.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF" 
@@ -8,9 +8,9 @@
             <Grid x:Name="ContentGrid" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <StackPanel>
                     <Image Grid.Column="0" x:Name="userIcon"
-                                                   Source="Assets/pin.png"
-                                                   Visibility="Visible"
-                                                   />
+                            Source="Assets/pin.png"
+                            Visibility="Visible"
+                            />
                 </StackPanel>
             </Grid>
         </ControlTemplate>
@@ -25,7 +25,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Column="0" Grid.ColumnSpan="2" Background="#00588d">
+        <Grid Grid.Column="0" Grid.ColumnSpan="2" Background="#217346">
             <Image Margin="10" Grid.Column="0" x:Name="secoIcon"
                    Source="Assets/seco.png"
                    Visibility="Visible"
@@ -33,13 +33,13 @@
                    HorizontalAlignment="Left"
                     />
             <Image Margin="10,5,10,5" Grid.Column="0" x:Name="hc4Icon"
-                   Source="Assets/hc4.png"
+                   Source="Assets/hc4-2.png"
                    Visibility="Visible"
                    Width="40"
                    HorizontalAlignment="Right"
                     />
             <StackPanel VerticalAlignment="Bottom" Margin="0,0,0,5">
-                <ProgressBar IsIndeterminate="True" IsEnabled="True" Foreground="#00588d"/>
+                <ProgressBar IsIndeterminate="True" IsEnabled="True" Foreground="#217346"/>
             </StackPanel>
         </Grid>
         
@@ -48,30 +48,32 @@
             <m:Pushpin Location="-8.0675904, -34.9399137"/>
         </m:Map>
 
-        <Grid x:Name="InfoGrid" Grid.Column="0" Grid.Row="1" Background="#008abf">
+        <Grid x:Name="InfoGrid" Grid.Column="0" Grid.Row="1" Background="#ffffff">
             
             <StackPanel x:Name="InfoPanel" Orientation="Vertical" Margin="10,10,10,10" >
-                <TextBlock Foreground="#ebca78" FontSize="14" FontWeight="Bold">Identificador</TextBlock>
-                <TextBlock Margin="0,0,0,5" FontSize="20" Foreground="#eaba45" FontWeight="Bold" x:Name="TextName">Nome Test</TextBlock>
-                <TextBlock Foreground="#ebca78" FontSize="14" FontWeight="Bold">Localização</TextBlock>
-                <TextBlock Margin="0,0,0,5" FontSize="20" Foreground="#eaba45" FontWeight="Bold" x:Name="TextAddress" TextWrapping="Wrap">Rua Teste</TextBlock>
-                <TextBlock Foreground="#ebca78" FontSize="14" FontWeight="Bold">Volume atual</TextBlock>
-                <TextBlock Margin="0,0,0,5" FontSize="20" Foreground="#eaba45" FontWeight="Bold" x:Name="TextCurrentVolume">Volume atual</TextBlock>
-                <TextBlock Foreground="#ebca78" FontSize="14" FontWeight="Bold">Dimensões</TextBlock>
-                <TextBlock Margin="0,0,0,5" FontSize="20" Foreground="#eaba45" FontWeight="Bold" x:Name="TextDimensions">Dimensões</TextBlock>
-                <TextBlock Foreground="#ebca78" FontSize="14" FontWeight="Bold">Status Gás</TextBlock>
-                <TextBlock Margin="0,0,0,5" FontSize="20" Foreground="#eaba45" FontWeight="Bold" x:Name="TextStatus">Situação</TextBlock>
-                <TextBlock Foreground="#ebca78" FontSize="14" FontWeight="Bold">Última Atualização</TextBlock>
-                <TextBlock FontSize="20" Foreground="#eaba45" FontWeight="Bold" x:Name="TextUpdated">Data</TextBlock>
-                <TextBlock Margin="0,0,0,5" FontSize="20" Foreground="#eaba45" FontWeight="Bold" x:Name="TextUpdatedTime">Hora</TextBlock>
-                <TextBlock Foreground="#ebca78" FontSize="14" FontWeight="Bold">Última Manutenção</TextBlock>
-                <TextBlock Margin="0,0,0,5" FontSize="20" Foreground="#eaba45" FontWeight="Bold" x:Name="TextManteinance">Data</TextBlock>
+                <TextBlock Foreground="#185433" FontSize="14" FontWeight="Bold">Identificador</TextBlock>
+                <TextBlock Margin="0,0,0,5" FontSize="20" Foreground="#217346" FontWeight="Bold" x:Name="TextName">Nome Test</TextBlock>
+                <TextBlock Foreground="#185433" FontSize="14" FontWeight="Bold">Localização</TextBlock>
+                <TextBlock Margin="0,0,0,5" FontSize="20" Foreground="#217346" FontWeight="Bold" x:Name="TextAddress" TextWrapping="Wrap">Rua Teste</TextBlock>
+                <TextBlock Foreground="#185433" FontSize="14" FontWeight="Bold">Volume atual</TextBlock>
+                <TextBlock Margin="0,0,0,5" FontSize="20" Foreground="#217346" FontWeight="Bold" x:Name="TextCurrentVolume">Volume atual</TextBlock>
+                <TextBlock Foreground="#185433" FontSize="14" FontWeight="Bold">Profundidade atual</TextBlock>
+                <TextBlock Margin="0,0,0,5" FontSize="20" Foreground="#217346" FontWeight="Bold" x:Name="TextCurrentHeight">Profundidade atual</TextBlock>
+                <TextBlock Foreground="#185433" FontSize="14" FontWeight="Bold">Dimensões</TextBlock>
+                <TextBlock Margin="0,0,0,5" FontSize="20" Foreground="#217346" FontWeight="Bold" x:Name="TextDimensions">Dimensões</TextBlock>
+                <TextBlock Foreground="#185433" FontSize="14" FontWeight="Bold">Status Gás</TextBlock>
+                <TextBlock Margin="0,0,0,5" FontSize="20" Foreground="#217346" FontWeight="Bold" x:Name="TextStatus">Situação</TextBlock>
+                <TextBlock Foreground="#185433" FontSize="14" FontWeight="Bold">Última Atualização</TextBlock>
+                <TextBlock FontSize="20" Foreground="#217346" FontWeight="Bold" x:Name="TextUpdated">Data</TextBlock>
+                <TextBlock Margin="0,0,0,5" FontSize="20" Foreground="#217346" FontWeight="Bold" x:Name="TextUpdatedTime">Hora</TextBlock>
+                <TextBlock Foreground="#185433" FontSize="14" FontWeight="Bold">Última Manutenção</TextBlock>
+                <TextBlock Margin="0,0,0,5" FontSize="20" Foreground="#217346" FontWeight="Bold" x:Name="TextManteinance">Data</TextBlock>
             </StackPanel>
 
             <StackPanel Orientation="Vertical" Margin="10,10,10,10" VerticalAlignment="Bottom">
-                <CheckBox x:Name="AllCheckbox" IsChecked="True" Click="CheckBox_Click" Foreground="#ebca78" FontSize="14" FontWeight="Bold">Todos</CheckBox>
-                <CheckBox x:Name="VolumeAlertCheckbox" Click="CheckBox_Click" Foreground="#ebca78" FontSize="14" FontWeight="Bold">Volume em Alerta/Crítico</CheckBox>
-                <CheckBox x:Name="GasAlertCheckbox" Click="CheckBox_Click" Foreground="#ebca78" FontSize="14" FontWeight="Bold">Gás em Alerta/Crítico</CheckBox>
+                <CheckBox x:Name="AllCheckbox" IsChecked="True" Click="CheckBox_Click" Foreground="#217346" FontSize="14" FontWeight="Bold">Todos</CheckBox>
+                <CheckBox x:Name="VolumeAlertCheckbox" Click="CheckBox_Click" Foreground="#217346" FontSize="14" FontWeight="Bold">Volume em Alerta/Crítico</CheckBox>
+                <CheckBox x:Name="GasAlertCheckbox" Click="CheckBox_Click" Foreground="#217346" FontSize="14" FontWeight="Bold">Gás em Alerta/Crítico</CheckBox>
             </StackPanel>
         </Grid>
 

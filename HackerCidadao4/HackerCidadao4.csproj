@@ -89,6 +89,7 @@
     <Compile Include="Data\ManholeRepository.cs" />
     <Compile Include="Entities\Manhole.cs" />
     <Compile Include="Entities\MultiSensor.cs" />
+    <Compile Include="Entities\ExternalSensor.cs" />
     <Compile Include="Entities\Sensor.cs" />
     <Compile Include="Entities\SensorList.cs" />
     <Compile Include="Services\Network.cs" />
@@ -145,6 +146,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\seco.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\hc4-2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

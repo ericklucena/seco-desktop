@@ -57,17 +57,18 @@ namespace HackerCidadao4.Data
 
         }
 
-        public void InsertSensorsValues(List<Sensor> sensors, MultiSensor mSensor)
+        public void InsertSensorsValues(List<Sensor> sensors)
         {
-            //int i = 0;
-            //int size = sensors.Count;
-            //foreach (Manhole m in _Manholes.Values)
-            //{
-            //    double value;
-            //    Double.TryParse(sensors.ElementAt(i++ % size).Valor, out value);
-            //    m.CurrentHeight = value;
-            //    m.GasState = mSensor.GasState;
-            //}
+            int i = 0;
+            int size = sensors.Count;
+            Random random = new Random();
+            foreach (Manhole m in _Manholes.Values)
+            {
+                double value;
+                Double.TryParse(sensors.ElementAt(i++ % size).Valor, out value);
+                m.CurrentHeight = value;
+                m.GasState = (EImportanceState) random.Next(0,2);
+            }
         }
 
         private List<Manhole> _CreateMocks()
@@ -81,18 +82,6 @@ namespace HackerCidadao4.Data
                 Street = "Boa Viagem, Av.",
                 Latitude = -8.142323,
                 Longitude = -34.9037,
-                Dimensions = new Dimension() { X = 100, Y = 100, Z = 500 },
-                CurrentHeight = 4,
-                GasState = EImportanceState.Normal,
-                LastManteinance = DateTime.Now
-            });
-            mocks.Add(new Manhole()
-            {
-                Id = 2,
-                Name = "Bueiro " + 2,
-                Street = "Conselheiro Aguiar, Av.",
-                Latitude = -8.099068,
-                Longitude = -34.8858,
                 Dimensions = new Dimension() { X = 100, Y = 100, Z = 500 },
                 CurrentHeight = 4,
                 GasState = EImportanceState.Normal,
