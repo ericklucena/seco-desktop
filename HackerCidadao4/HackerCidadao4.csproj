@@ -89,8 +89,8 @@
     <Compile Include="Data\ManholeRepository.cs" />
     <Compile Include="Entities\Manhole.cs" />
     <Compile Include="Entities\MultiSensor.cs" />
-    <Compile Include="Entities\ExternalSensor.cs" />
     <Compile Include="Entities\Sensor.cs" />
+    <Compile Include="Entities\SecoSensor.cs" />
     <Compile Include="Entities\SensorList.cs" />
     <Compile Include="Services\Network.cs" />
     <Page Include="CustomPin.xaml">

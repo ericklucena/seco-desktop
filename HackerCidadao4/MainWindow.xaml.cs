@@ -83,7 +83,7 @@ namespace HackerCidadao4
             bool volumeAlert = VolumeAlertCheckbox.IsChecked.Value;
             _repository = _secoSensors?.Select(m => m.CreateManhole()).ToList();
             ManholeRepository.Instance.InsertSensorsValues(_sensors);
-            _repository.AddRange(ManholeRepository.Instance.GetManholes().Where(m => m.Id % 5 == 0));
+            _repository.AddRange(ManholeRepository.Instance.GetManholes(volumeAlert, gasAlert).Where(m => m.Id % 5 == 0));
 
 
             foreach (Manhole m in _repository)

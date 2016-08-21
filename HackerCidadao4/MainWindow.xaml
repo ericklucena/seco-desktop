@@ -13,7 +13,7 @@
                             />
                 </StackPanel>
             </Grid>
-        </ControlTemplate>
+        </ControlTemplate>  
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>

@@ -47,7 +47,7 @@ namespace HackerCidadao4.Data
                 {
                     if (volumeAlert && m.VolumeState != EImportanceState.Normal)
                         filtered.Add(m.Id, m);
-                    if (gasAlert && m.GasState != EImportanceState.Normal)
+                    else if (gasAlert && m.GasState != EImportanceState.Normal)
                         filtered.Add(m.Id, m);
                 }
             }
