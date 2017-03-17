@@ -47,7 +47,7 @@ namespace HackerCidadao4.Entities
                     Y = dimensionY,
                     Z = dimensionZ
                 },
-                GasState = (EImportanceState)gasState,
+                GasState = (EImportanceState)(gasState-1),
                 LastUpdated = _FromUnixTime(lastUpdated),
                 LastManteinance = _FromUnixTime(lastManteinance)
             };

@@ -10,7 +10,7 @@ namespace HackerCidadao4.Services
 {
     class Network
     {
-        private const string GET_SECO_SENSOR = "http://seco-hc4.appspot.com/manhole/get?id=2";
+        private const string GET_SECO_SENSOR = "http://seco-hc4.appspot.com/manhole/get";
         private const string GET_SENSORS = "http://10.10.254.1/embarquelab/downloads/EL_sensores_json.php";
         private const string GET_GAS_SENSOR = "https://e115dc0e-a589-42bd-87bd-715cd63833d5-bluemix.cloudant.com/emprel-iot/_all_docs?&limit=1&include_docs=true&descending=true";
 

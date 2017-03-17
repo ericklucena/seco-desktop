@@ -40,7 +40,7 @@ namespace HackerCidadao4
 
             _dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             _dispatcherTimer.Tick += _dispatcherTimer_Tick;
-            _dispatcherTimer.Interval = new TimeSpan(0, 0, 15);
+            _dispatcherTimer.Interval = new TimeSpan(0, 0, 5);
             _dispatcherTimer.Start();
 
             FillSidebar();
@@ -60,7 +60,15 @@ namespace HackerCidadao4
             try
             {
                 _currentJsonData = Network.SensorsData();
-                _sensors = _ParseSensors(_currentJsonData).Sensor;
+                //_sensors = _ParseSensors(_currentJsonData).Sensor;
+
+                _sensors = new List<Sensor>();
+                _sensors.Add(new Sensor()
+                {
+                    Valor = "300",
+                    Descricao = "Ultrassom"
+                    
+                });
             }catch
             {
 
@@ -74,16 +82,17 @@ namespace HackerCidadao4
 
         private void _RefreshMap()
         {
-            if (_secoSensors == null)
-                return;
-
-            MapControl.Children.Clear();
-
             bool gasAlert = GasAlertCheckbox.IsChecked.Value;
             bool volumeAlert = VolumeAlertCheckbox.IsChecked.Value;
             _repository = _secoSensors?.Select(m => m.CreateManhole()).ToList();
             ManholeRepository.Instance.InsertSensorsValues(_sensors);
-            _repository.AddRange(ManholeRepository.Instance.GetManholes(volumeAlert, gasAlert).Where(m => m.Id % 5 == 0));
+
+            if (_secoSensors != null)
+            {
+                MapControl.Children.Clear();
+                _repository.AddRange(ManholeRepository.Instance.GetManholes(volumeAlert, gasAlert));
+
+            }
 
 
             foreach (Manhole m in _repository)
@@ -149,7 +158,7 @@ namespace HackerCidadao4
             {
                 TextName.Text = manhole.Name;
                 TextAddress.Text = manhole.Street;
-                TextCurrentVolume.Text = manhole.FillRatio * 100 + " %";
+                TextCurrentVolume.Text = string.Format("{0:0.00} %", manhole.FillRatio * 100);
                 TextCurrentHeight.Text = string.Format("{0:0.00} cm", manhole.CurrentHeight);
                 TextDimensions.Text = manhole.Dimensions.ToString();
 
